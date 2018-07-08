@@ -8,7 +8,7 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
-cc.Class({
+window.GameUnit=cc.Class({
     extends: cc.Component,
 
     properties: {
@@ -36,6 +36,10 @@ cc.Class({
     start () {
 
     },
+
+    onDelete: function(){
+        shell.units.remove(this.node);
+    }
 
     // update (dt) {},
 });

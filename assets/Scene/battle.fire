@@ -181,6 +181,7 @@
     "map": null,
     "canvas": {
       "__id__": 2
-    }
+    },
+    "units": []
   }
 ]

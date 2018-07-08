@@ -31,7 +31,9 @@ cc.Class({
         // },
 
         map:{type: GameMap, default: null},
-        canvas: cc.Node
+        canvas: cc.Node,
+
+        units:[]
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -56,15 +58,50 @@ cc.Class({
     },
 
     loadMap:function(url){
-        cc.loader.loadRes(url, cc.TiledMapAsset, function(err, res){
-            if(err){console.log(err); return; }
-            shell._loadMapAsset(res);
-        });
-    }, 
+
+        let res=cc.loader.getRes(url);
+        shell._loadMapAsset(res);
+
+        // cc.loader.loadRes(url, cc.TiledMapAsset, function(err, res){
+        //     if(err){console.log(err); return; }
+        //     shell._loadMapAsset(res);
+        // });
+    },
+
+    _loadUnitPrefab: function(prefab){
+        let node=cc.instantiate(prefab);
+        this.canvas.addChild(node);
+        this.units.push(node);
+    },
+
+    spawnUnit: function(url){
+
+        let res=cc.loader.getRes(url);
+        shell._loadUnitPrefab(res);
+
+        // cc.loader.loadRes(url, function(err, res){
+        //     if(err){console.log(err); return; }
+        //     shell._loadUnitPrefab(res);
+        // });
+    },
+
 
     start () {
         window.shell=this;  
     },
 
+
+    test: function(){
+        shell.loadMap('map/battlemap_1');
+        shell.spawnUnit('unit_0');
+        // while(shell.units.lenth<1 || !shell.units[0]){
+        //     sleep(1000);
+        //     console.log('.');
+        // }
+        console.log(shell.units.length, shell.units[0]);
+        shell.units[0].addComponent('UnitMoveControl');
+        shell.units[0].getComponent('UnitMoveControl').mapLayerName='building';
+        shell.units[0].getComponent('UnitMoveControl').speed=10;
+    }
     // update (dt) {},
 });
