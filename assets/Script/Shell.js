@@ -38,7 +38,17 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        for(let v in cc.loader._resources._pathToUuid){
+            cc.loader.loadRes(v, function(err, res){
+                if(err){
+                    console.log(err);
+                }
+                else
+                    console.log("Loading "+typeof(res)+": "+v);
+            });
+        }
+    },  
 
     _loadMapAsset: function(tmxAsset){
        
@@ -55,6 +65,7 @@ cc.Class({
 
         //this.map=mapNode;
         this.canvas.addChild(mapNode);
+        //mapNode.setAnchorPoint(0,0);
     },
 
     loadMap:function(url){
@@ -92,13 +103,20 @@ cc.Class({
 
 
     test: function(){
+        // for(let v in cc.loader._resources._pathToUuid){
+        //     cc.loader.loadRes(v);
+        // }
+
+
         shell.loadMap('map/battlemap_1');
         shell.spawnUnit('unit_0');
-        // while(shell.units.lenth<1 || !shell.units[0]){
-        //     sleep(1000);
-        //     console.log('.');
-        // }
-        console.log(shell.units.length, shell.units[0]);
+        // // while(shell.units.lenth<1 || !shell.units[0]){
+        // //     sleep(1000);
+        // //     console.log('.');
+        // // }
+        //console.log(shell.units.length, shell.units[0]);
+        //shell.map.node.setAnchorPoint(0,0);
+        shell.units[0].setPosition(16,16);
         shell.units[0].addComponent('UnitMoveControl');
         shell.units[0].getComponent('UnitMoveControl').mapLayerName='building';
         shell.units[0].getComponent('UnitMoveControl').speed=10;

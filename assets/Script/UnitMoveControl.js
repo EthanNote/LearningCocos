@@ -8,7 +8,7 @@ window.GameUnitMoveControl=cc.Class({
         //getGID: null
     },
 
-    getHitDetectionPos: function(r=1){
+    getHitDetectionPos: function(r=16){
         return [
             this.node.position.add(new cc.Vec2(-r, -r)),
             this.node.position.add(new cc.Vec2(-r, r)),
@@ -29,15 +29,19 @@ window.GameUnitMoveControl=cc.Class({
 
         let screenPos=this.node.parent.convertToWorldSpaceAR(pos);
         let mapPos=shell.map.node.convertToNodeSpace(screenPos);
-        let tsize=mapPos.x/shell.map.tiledMap.getTileSize();
+        let tsize=shell.map.tiledMap.getTileSize();
+        let msize=shell.map.tiledMap.getMapSize();
 
-        let tilePos=cc.Vec2(mapPos.x/tsize.x, mapPos.y/tsize.y);
+        let tilePos=new cc.Vec2(
+            parseInt(mapPos.x/tsize.width), 
+            parseInt((msize.height*tsize.height-mapPos.y)/tsize.height)
+        );
 
-        console.log(pos, screenPos, mapPos, tilePos);
+        
 
-        return layer.getTileGIDAt(tilePos);
-
-        //return 0;
+        let GID=layer.getTileGIDAt(tilePos);
+        //console.log(pos, screenPos, mapPos, tilePos, GID);
+        return GID;
     },
 
     getVelocity: function(pos){
@@ -71,6 +75,12 @@ window.GameUnitMoveControl=cc.Class({
                     break;
                 }
             }
+
+            // let testPos=this.node.position.add(moveVectors[t]);
+            // if(this.getGID(testPos)){
+            //     result=false;
+            // }
+
             if(result){
                 this.node.position=this.node.position.add(moveVectors[t]);
                 //console.log(moveVectors[t]);
